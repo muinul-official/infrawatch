@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_monitor"
+        android:title="Monitor"
+        android:icon="@drawable/ic_monitor" />
+
+    <item
+        android:id="@+id/nav_analytics"
+        android:title="Analytics"
+        android:icon="@drawable/ic_analytics" />
+
+    <item
+        android:id="@+id/nav_reports"
+        android:title="Reports"
+        android:icon="@drawable/ic_reports" />
+
+    <item
+        android:id="@+id/nav_notifications"
+        android:title="Alerts"
+        android:icon="@drawable/ic_notifications" />
+
+</menu>
