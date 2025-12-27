@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="B75">#96a2ec</color>
+    <color name="B200">#2b43d9</color>
+    <color name="B300">#001cd1</color>
+
+    <color name="severity_minor">#4CAF50</color>
+    <color name="severity_moderate">#FFC107</color>
+    <color name="severity_major">#F44336</color>
+</resources>
