@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="notification_color">#6750A4</color>
+    <color name="B50">#e6e8fa</color>
+    <color name="B75">#96a2ec</color>
+    <color name="B100">#6b7be4</color>
+    <color name="B200">#2b43d9</color>
+    <color name="B300">#001cd1</color>
+    <color name="B400">#001492</color>
+    <color name="B500">#00117f</color>
+</resources>
