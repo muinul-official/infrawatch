@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Standard Colors (As you provided) -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="gray_light">#E0E0E0</color>
+    <color name="gray_dark">#757575</color>
+
+    <!-- Primary Theme Colors (Needed by themes.xml) -->
+    <color name="colorPrimary">#1976D2</color> <!-- Deep Blue -->
+    <color name="colorPrimaryDark">#1565C0</color> <!-- Darker Blue for Status Bar -->
+    <color name="colorAccent">#FFC107</color> <!-- Bright Yellow/Gold for accents and selected tabs -->
+
+    <!-- Status Indicator Colors (Needed by item_report.xml) -->
+    <color name="status_new">#E91E63</color> <!-- Pink/Red for "New Report" -->
+    <color name="status_inprogress">#FF9800</color> <!-- Orange for "In Progress" -->
+    <color name="status_completed">#4CAF50</color> <!-- Green for "Completed" -->
+</resources>
