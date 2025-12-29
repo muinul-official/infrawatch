@@ -28,6 +28,8 @@ import java.util.List;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -42,9 +44,14 @@ public class MainActivity extends AppCompatActivity
     int totalIssues = 0;
     int highRiskCount = 0;
 
-    private HeatmapTileProvider heatmapProvider;
-    private TileOverlay heatmapOverlay;
     private ArrayList<LatLng> highRiskPoints = new ArrayList<>();
+    private ArrayList<LatLng> mediumRiskPoints = new ArrayList<>();
+    private ArrayList<LatLng> lowRiskPoints = new ArrayList<>();
+
+    private TileOverlay highRiskOverlay;
+    private TileOverlay mediumRiskOverlay;
+    private TileOverlay lowRiskOverlay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,32 +87,23 @@ public class MainActivity extends AppCompatActivity
 
                     Log.d("CHART_DEBUG", "Documents = " + queryDocumentSnapshots.size());
 
-                    int trendIndex = 0;
                     ArrayList<Entry> trendEntries = new ArrayList<>();
                     ArrayList<Integer> weeklyCounts = new ArrayList<>();
 
                     totalIssues = 0;
                     highRiskCount = 0;
-                    highRiskPoints.clear();
 
-                    long currentWeek = -1;
-                    int currentWeekCount = 0;
+
+                    Map<String, Integer> locationFrequency = new HashMap<>();
+                    Map<String, LatLng> locationLatLngMap = new HashMap<>();
+                    Map<Long, Integer> weeklyCountMap = new HashMap<>();
 
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         totalIssues++;
 
-                        String status = doc.getString("status");
                         String location = doc.getString("location");
 
-                        boolean isHighRisk = status != null &&
-                                status.toLowerCase().contains("pending");
-
-                        if (isHighRisk) {
-                            highRiskCount++;
-                        }
-
-                        trendEntries.add(new Entry(trendIndex++, totalIssues));
-
+                        // --- WEEKLY AGGREGATION ---
                         if (doc.getTimestamp("timestamp") != null) {
                             long time = doc.getTimestamp("timestamp")
                                     .toDate()
@@ -113,41 +111,86 @@ public class MainActivity extends AppCompatActivity
 
                             long weekIndex = time / (1000L * 60 * 60 * 24 * 7);
 
-                            if (currentWeek == -1) {
-                                currentWeek = weekIndex;
-                            }
-
-                            if (weekIndex == currentWeek) {
-                                currentWeekCount++;
-                            } else {
-                                weeklyCounts.add(currentWeekCount);
-                                currentWeek = weekIndex;
-                                currentWeekCount = 1;
-                            }
+                            weeklyCountMap.put(
+                                    weekIndex,
+                                    weeklyCountMap.getOrDefault(weekIndex, 0) + 1
+                            );
                         }
 
-                        // --- HEATMAP DATA ---
-                        if (isHighRisk && location != null) {
-                            try {
-                                Geocoder geocoder = new Geocoder(this);
-                                List<Address> addresses =
-                                        geocoder.getFromLocationName(location, 1);
+                        // --- LOCATION FREQUENCY ---
+                        if (location != null) {
+                            locationFrequency.put(
+                                    location,
+                                    locationFrequency.getOrDefault(location, 0) + 1
+                            );
 
-                                if (addresses != null && !addresses.isEmpty()) {
-                                    LatLng point = new LatLng(
-                                            addresses.get(0).getLatitude(),
-                                            addresses.get(0).getLongitude()
-                                    );
-                                    highRiskPoints.add(point);
+                            if (!locationLatLngMap.containsKey(location)) {
+                                try {
+                                    Geocoder geocoder = new Geocoder(this);
+                                    List<Address> addresses =
+                                            geocoder.getFromLocationName(location, 1);
+
+                                    if (addresses != null && !addresses.isEmpty()) {
+                                        locationLatLngMap.put(
+                                                location,
+                                                new LatLng(
+                                                        addresses.get(0).getLatitude(),
+                                                        addresses.get(0).getLongitude()
+                                                )
+                                        );
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("Heatmap", "Geocoding failed", e);
                                 }
-                            } catch (Exception e) {
-                                Log.e("Heatmap", "Geocoding failed", e);
                             }
                         }
                     }
 
-                    if (currentWeekCount > 0) {
-                        weeklyCounts.add(currentWeekCount);
+                    ArrayList<Long> sortedWeeks = new ArrayList<>(weeklyCountMap.keySet());
+                    java.util.Collections.sort(sortedWeeks);
+
+                    weeklyCounts.clear();
+                    trendEntries.clear();
+
+                    int index = 0;
+                    for (Long week : sortedWeeks) {
+                        int count = weeklyCountMap.get(week);
+                        weeklyCounts.add(count);
+                        trendEntries.add(new Entry(index++, count));
+                    }
+
+                    if (trendEntries.size() == 1) {
+                        Entry first = trendEntries.get(0);
+                        trendEntries.add(new Entry(first.getX() + 1, first.getY()));
+                    }
+
+
+                    highRiskPoints.clear();
+                    mediumRiskPoints.clear();
+                    lowRiskPoints.clear();
+                    highRiskCount = 0;
+
+                    for (String loc : locationFrequency.keySet()) {
+                        int count = locationFrequency.get(loc);
+                        LatLng point = locationLatLngMap.get(loc);
+
+                        if (point == null) continue;
+
+                        if (count >= 5) {
+                            // 🔴 HIGH RISK
+                            highRiskCount++;
+                            for (int i = 0; i < count; i++) {
+                                highRiskPoints.add(point);
+                            }
+                        } else if (count >= 2) {
+                            // 🟠 MEDIUM RISK
+                            for (int i = 0; i < count; i++) {
+                                mediumRiskPoints.add(point);
+                            }
+                        } else {
+                            // 🟢 LOW RISK
+                            lowRiskPoints.add(point);
+                        }
                     }
 
                     // --- SIMPLE PREDICTION ---
@@ -165,7 +208,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (weeklyCounts.size() >= 2) {
                         if (predictedNextWeek > weeklyCounts.get(weeklyCounts.size()-1)) {
-                            tvPrediction.setText("Maintenance demand is expected to increase next month in Area A and Bridge Zone");
+                            tvPrediction.setText("Maintenance demand is expected to increase based on recent weekly trends.");
                         } else {
                             tvPrediction.setText("Maintenance demand is stable for the upcoming week.");
                         }
@@ -173,36 +216,88 @@ public class MainActivity extends AppCompatActivity
                         tvPrediction.setText("Analyzing data... check back soon for planning insights.");
                     }
 
-                    // --- HEATMAP ---
-                    if (mMap != null && !highRiskPoints.isEmpty()) {
-                        if (heatmapOverlay != null) {
-                            heatmapOverlay.remove();
+                        // Remove existing overlays
+                        if (highRiskOverlay != null) highRiskOverlay.remove();
+                        if (mediumRiskOverlay != null) mediumRiskOverlay.remove();
+                        if (lowRiskOverlay != null) lowRiskOverlay.remove();
+
+                        // 🔴 HIGH RISK - RED
+                        if (!highRiskPoints.isEmpty()) {
+                            HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
+                                    .data(highRiskPoints)
+                                    .radius(60)
+                                    .opacity(0.8f)
+                                    .gradient(new com.google.maps.android.heatmaps.Gradient(
+                                            new int[]{
+                                                    android.graphics.Color.rgb(255, 0, 0),
+                                                    android.graphics.Color.rgb(255, 80, 80)
+                                            },
+                                            new float[]{0.2f, 1f}
+                                    ))
+                                    .build();
+
+                            highRiskOverlay = mMap.addTileOverlay(
+                                    new TileOverlayOptions().tileProvider(provider)
+                            );
                         }
 
-                        heatmapProvider = new HeatmapTileProvider.Builder()
-                                .data(highRiskPoints)
-                                .radius(50)
-                                .opacity(0.7f)
-                                .build();
+                        // 🟠 MEDIUM RISK - ORANGE
+                        if (!mediumRiskPoints.isEmpty()) {
+                            HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
+                                    .data(mediumRiskPoints)
+                                    .radius(50)
+                                    .opacity(0.7f)
+                                    .gradient(new com.google.maps.android.heatmaps.Gradient(
+                                            new int[]{
+                                                    android.graphics.Color.rgb(255, 165, 0),
+                                                    android.graphics.Color.rgb(255, 200, 100)
+                                            },
+                                            new float[]{0.2f, 1f}
+                                    ))
+                                    .build();
 
-                        heatmapOverlay = mMap.addTileOverlay(
-                                new TileOverlayOptions().tileProvider(heatmapProvider)
-                        );
-                    }
+                            mediumRiskOverlay = mMap.addTileOverlay(
+                                    new TileOverlayOptions().tileProvider(provider)
+                            );
+                        }
+
+                        // 🟢 LOW RISK - GREEN
+                        if (!lowRiskPoints.isEmpty()) {
+                            HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
+                                    .data(lowRiskPoints)
+                                    .radius(40)
+                                    .opacity(0.6f)
+                                    .gradient(new com.google.maps.android.heatmaps.Gradient(
+                                            new int[]{
+                                                    android.graphics.Color.rgb(0, 180, 0),
+                                                    android.graphics.Color.rgb(120, 220, 120)
+                                            },
+                                            new float[]{0.2f, 1f}
+                                    ))
+                                    .build();
+
+                            lowRiskOverlay = mMap.addTileOverlay(
+                                    new TileOverlayOptions().tileProvider(provider)
+                            );
+                        }
 
                     // --- UI ---
                     tvTotalIssues.setText(String.valueOf(totalIssues));
                     tvHighRisk.setText(String.valueOf(highRiskCount));
 
                     LineDataSet dataSet = new LineDataSet(trendEntries, "Maintenance Trend");
-                    dataSet.setLineWidth(2f);
-                    dataSet.setDrawCircles(true);
                     dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                    dataSet.setCubicIntensity(0.2f);
+
+                    dataSet.setLineWidth(3f);
+                    dataSet.setColor(android.graphics.Color.parseColor("#2196F3"));
+
+                    dataSet.setDrawCircles(false);
+                    dataSet.setDrawValues(false);
+
                     dataSet.setDrawFilled(true);
                     dataSet.setFillColor(android.graphics.Color.parseColor("#DDEBFF"));
-                    dataSet.setColor(android.graphics.Color.parseColor("#2196F3"));
-                    dataSet.setLineWidth(3f);
-                    dataSet.setDrawCircles(false);
+                    dataSet.setFillAlpha(180);
 
 
                     lineChart.setData(new LineData(dataSet));
