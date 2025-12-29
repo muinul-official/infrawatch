@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity
 
                         String location = doc.getString("location");
 
-                        // --- WEEKLY AGGREGATION ---
                         if (doc.getTimestamp("timestamp") != null) {
                             long time = doc.getTimestamp("timestamp")
                                     .toDate()
@@ -117,7 +116,6 @@ public class MainActivity extends AppCompatActivity
                             );
                         }
 
-                        // --- LOCATION FREQUENCY ---
                         if (location != null) {
                             locationFrequency.put(
                                     location,
@@ -177,23 +175,19 @@ public class MainActivity extends AppCompatActivity
                         if (point == null) continue;
 
                         if (count >= 5) {
-                            // 🔴 HIGH RISK
                             highRiskCount++;
                             for (int i = 0; i < count; i++) {
                                 highRiskPoints.add(point);
                             }
                         } else if (count >= 2) {
-                            // 🟠 MEDIUM RISK
                             for (int i = 0; i < count; i++) {
                                 mediumRiskPoints.add(point);
                             }
                         } else {
-                            // 🟢 LOW RISK
                             lowRiskPoints.add(point);
                         }
                     }
 
-                    // --- SIMPLE PREDICTION ---
                     int predictedNextWeek = 0;
 
                     if (weeklyCounts.size() >= 2) {
@@ -216,12 +210,10 @@ public class MainActivity extends AppCompatActivity
                         tvPrediction.setText("Analyzing data... check back soon for planning insights.");
                     }
 
-                        // Remove existing overlays
                         if (highRiskOverlay != null) highRiskOverlay.remove();
                         if (mediumRiskOverlay != null) mediumRiskOverlay.remove();
                         if (lowRiskOverlay != null) lowRiskOverlay.remove();
 
-                        // 🔴 HIGH RISK - RED
                         if (!highRiskPoints.isEmpty()) {
                             HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
                                     .data(highRiskPoints)
@@ -241,7 +233,6 @@ public class MainActivity extends AppCompatActivity
                             );
                         }
 
-                        // 🟠 MEDIUM RISK - ORANGE
                         if (!mediumRiskPoints.isEmpty()) {
                             HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
                                     .data(mediumRiskPoints)
@@ -261,7 +252,6 @@ public class MainActivity extends AppCompatActivity
                             );
                         }
 
-                        // 🟢 LOW RISK - GREEN
                         if (!lowRiskPoints.isEmpty()) {
                             HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
                                     .data(lowRiskPoints)
@@ -281,7 +271,6 @@ public class MainActivity extends AppCompatActivity
                             );
                         }
 
-                    // --- UI ---
                     tvTotalIssues.setText(String.valueOf(totalIssues));
                     tvHighRisk.setText(String.valueOf(highRiskCount));
 
