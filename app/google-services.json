@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "361155184472",
+    "firebase_url": "https://infrawatch-wia2007-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "infrawatch-wia2007",
+    "storage_bucket": "infrawatch-wia2007.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361155184472:android:65da342768026c2904c72d",
+        "android_client_info": {
+          "package_name": "com.example.assignmentreporting"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArgtTbpqvvr7bTbt205UGRGCNnhJYa71U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361155184472:android:82b398db22132cce04c72d",
+        "android_client_info": {
+          "package_name": "com.example.dataanalytics2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArgtTbpqvvr7bTbt205UGRGCNnhJYa71U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361155184472:android:514742b0fdb70de504c72d",
+        "android_client_info": {
+          "package_name": "com.example.infrawatchmapdev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArgtTbpqvvr7bTbt205UGRGCNnhJYa71U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361155184472:android:9cfede9ff41ada2804c72d",
+        "android_client_info": {
+          "package_name": "com.example.maintenance_dashboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArgtTbpqvvr7bTbt205UGRGCNnhJYa71U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361155184472:android:63ef7dcbd4a78ec404c72d",
+        "android_client_info": {
+          "package_name": "com.example.notification_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArgtTbpqvvr7bTbt205UGRGCNnhJYa71U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
