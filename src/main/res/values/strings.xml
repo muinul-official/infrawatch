@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Add your app name here -->
+    <string name="app_name">ReportDamageApp</string>
+
+    <!-- Array of Damage Categories for the Spinner Dropdown -->
+    <string-array name="damage_categories_array">
+        <item>Roads &amp; Transportation</item>
+        <item>Public Facilities &amp; Buildings</item>
+        <item>Utilities &amp; Basic Services</item>
+        <item>Waste &amp; Cleanliness</item>
+        <item>Environment &amp; Landscape</item>
+        <item>Safety &amp; Disaster Risks</item>
+    </string-array>
+</resources>
