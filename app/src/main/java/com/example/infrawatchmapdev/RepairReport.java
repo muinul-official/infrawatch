@@ -13,8 +13,7 @@ public class RepairReport {
     public Timestamp timestamp;
     public String userId;
     public String status;
-
-
+    public String damage_Level;
     public RepairReport() {}
 }
 
