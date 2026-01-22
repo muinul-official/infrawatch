@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#001492</color>
+    <color name="colorPrimaryDark">#000B4D</color>
+    <color name="brand_blue">#001492</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#808080</color>
+    <color name="surface_background">#F8FAFC</color>
+
+    <!-- Notification System -->
+    <color name="notification_color">#6750A4</color>
+    <color name="B50">#e6e8fa</color>
+    <color name="B300">#001cd1</color>
+    
+    <color name="priority_high">#EF4444</color>
+    <color name="priority_medium">#F59E0B</color>
+    <color name="priority_low">#10B981</color>
+    <color name="error_red">#EF4444</color>
+</resources>

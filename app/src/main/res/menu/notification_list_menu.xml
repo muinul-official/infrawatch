@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="Delete"
+        app:showAsAction="ifRoom"
+        android:visible="false" />
+    <item
+        android:id="@+id/action_clear_seen"
+        android:title="Clear seen"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_clear_all"
+        android:title="Clear all"
+        app:showAsAction="never" />
+</menu>

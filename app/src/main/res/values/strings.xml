@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">InfraWatch</string>
+
+    <!-- Strings from LoginRegisterFirebase merged -->
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="admin_sign_in">Admin Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign In</string>
+    <string name="logout">Logout</string>
+    <string name="the_email_or_password_you_entered_is_incorrect_please_try_again">The email or password you entered is incorrect. Please try again.</string>
+    
+    <!-- Array of Damage Categories for the Spinner Dropdown -->
+    <string-array name="damage_categories_array">
+        <item>Roads &amp; Transportation</item>
+        <item>Public Facilities &amp; Buildings</item>
+        <item>Utilities &amp; Basic Services</item>
+        <item>Waste &amp; Cleanliness</item>
+        <item>Environment &amp; Landscape</item>
+        <item>Safety &amp; Disaster Risks</item>
+    </string-array>
+</resources>
