@@ -152,15 +152,12 @@ The app uses a custom TensorFlow Lite model for damage severity classification:
 
 ## 👥 Team
 
-Md Muinul Islam
-Sneganrao Raman
-Jayyidan Abdurrohman
-Ramadhani Ayesha Zahira
-Aliff Harith Bin Halilul Rahman
-Cita Wafa Atiah
-
-
-
+- Md Muinul Islam
+- Sneganrao Raman
+- Jayyidan Abdurrohman
+- Ramadhani Ayesha Zahira
+- Aliff Harith Bin Halilul Rahman
+- Cita Wafa Atiah
 
 ---
 
